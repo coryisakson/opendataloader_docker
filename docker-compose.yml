@@ -1,0 +1,12 @@
+services:
+  opendataloader-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: opendataloader-pdf-api:local
+    ports:
+      - "8080:8080"
+    environment:
+      APP_CONFIG: /app/docker-api/config.yaml
+    volumes:
+      - ./docker-api/config.yaml:/app/docker-api/config.yaml:ro

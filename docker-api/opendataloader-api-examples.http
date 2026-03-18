@@ -1,0 +1,158 @@
+@baseUrl = http://localhost:8080
+@pdf1 = ../samples/pdf/lorem.pdf
+@pdf2 = ../samples/pdf/1901.03003.pdf
+
+# Note:
+# These examples use explicit multipart boundaries. If your HTTP client supports
+# automatic multipart generation, prefer it to avoid malformed/truncated streams.
+# File paths in < ./{{pdfX}}> are resolved relative to this .http file's folder.
+
+### Health check
+GET {{baseUrl}}/health
+Accept: application/json
+
+### List all supported converter options
+GET {{baseUrl}}/options
+Accept: application/json
+
+### Convert single PDF to JSON (Accept-driven)
+POST {{baseUrl}}/convert
+Accept: application/json
+Content-Type: multipart/form-data; boundary=JsonBoundary
+
+--JsonBoundary
+Content-Disposition: form-data; name="files"; filename="lorem.pdf"
+Content-Type: application/pdf
+
+< ./{{pdf1}}
+--JsonBoundary--
+
+### Convert single PDF to Markdown (explicit format + Accept)
+POST {{baseUrl}}/convert
+Accept: text/markdown
+Content-Type: multipart/form-data; boundary=MarkdownBoundary
+
+--MarkdownBoundary
+Content-Disposition: form-data; name="format"
+
+markdown
+--MarkdownBoundary
+Content-Disposition: form-data; name="files"; filename="lorem.pdf"
+Content-Type: application/pdf
+
+< ./{{pdf1}}
+--MarkdownBoundary--
+
+### Convert single PDF to plain text using options JSON payload
+POST {{baseUrl}}/convert
+Accept: text/plain
+Content-Type: multipart/form-data; boundary=TextBoundary
+
+--TextBoundary
+Content-Disposition: form-data; name="options"
+Content-Type: application/json
+
+{"format":"text","keep-line-breaks":true,"sanitize":true}
+--TextBoundary
+Content-Disposition: form-data; name="files"; filename="lorem.pdf"
+Content-Type: application/pdf
+
+< ./{{pdf1}}
+--TextBoundary--
+
+### Convert single PDF to HTML
+POST {{baseUrl}}/convert
+Accept: text/html
+Content-Type: multipart/form-data; boundary=HtmlBoundary
+
+--HtmlBoundary
+Content-Disposition: form-data; name="format"
+
+html
+--HtmlBoundary
+Content-Disposition: form-data; name="files"; filename="lorem.pdf"
+Content-Type: application/pdf
+
+< ./{{pdf1}}
+--HtmlBoundary--
+
+### Convert single PDF to annotated PDF
+POST {{baseUrl}}/convert
+Accept: application/pdf
+Content-Type: multipart/form-data; boundary=PdfBoundary
+
+--PdfBoundary
+Content-Disposition: form-data; name="format"
+
+pdf
+--PdfBoundary
+Content-Disposition: form-data; name="files"; filename="lorem.pdf"
+Content-Type: application/pdf
+
+< ./{{pdf1}}
+--PdfBoundary--
+
+### Convert multiple PDFs and return ZIP bundle
+POST {{baseUrl}}/convert
+Accept: application/zip
+Content-Type: multipart/form-data; boundary=ZipBoundary
+
+--ZipBoundary
+Content-Disposition: form-data; name="files"; filename="lorem.pdf"
+Content-Type: application/pdf
+
+< ./{{pdf1}}
+--ZipBoundary
+Content-Disposition: form-data; name="files"; filename="1901.03003.pdf"
+Content-Type: application/pdf
+
+< ./{{pdf2}}
+--ZipBoundary--
+
+### Multi-format request (format list) returns ZIP
+POST {{baseUrl}}/convert
+Accept: application/zip
+Content-Type: multipart/form-data; boundary=MultiFormatBoundary
+
+--MultiFormatBoundary
+Content-Disposition: form-data; name="format"
+
+json,markdown
+--MultiFormatBoundary
+Content-Disposition: form-data; name="files"; filename="lorem.pdf"
+Content-Type: application/pdf
+
+< ./{{pdf1}}
+--MultiFormatBoundary--
+
+### Example with additional OpenDataLoader options
+POST {{baseUrl}}/convert
+Accept: application/json
+Content-Type: multipart/form-data; boundary=AdvancedBoundary
+
+--AdvancedBoundary
+Content-Disposition: form-data; name="format"
+
+json
+--AdvancedBoundary
+Content-Disposition: form-data; name="pages"
+
+1-2
+--AdvancedBoundary
+Content-Disposition: form-data; name="reading-order"
+
+xycut
+--AdvancedBoundary
+Content-Disposition: form-data; name="table-method"
+
+cluster
+--AdvancedBoundary
+Content-Disposition: form-data; name="include-header-footer"
+
+true
+--AdvancedBoundary
+Content-Disposition: form-data; name="files"; filename="1901.03003.pdf"
+Content-Type: application/pdf
+
+< ./{{pdf2}}
+--AdvancedBoundary--

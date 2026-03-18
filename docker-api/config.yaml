@@ -1,0 +1,29 @@
+server:
+  host: 0.0.0.0
+  port: 8080
+
+runtime:
+  work_dir: /tmp/opendataloader-api
+  max_upload_mb: 64
+  infer_format_from_accept: true
+  default_format: json
+  default_response: json
+  zip_media_type: application/zip
+
+api:
+  accepted_media_types:
+    application/json: json
+    text/plain: text
+    text/markdown: markdown
+    text/html: html
+    application/pdf: pdf
+    application/zip: zip
+  direct_media_types:
+    json: application/json
+    text: text/plain; charset=utf-8
+    markdown: text/markdown; charset=utf-8
+    html: text/html; charset=utf-8
+    pdf: application/pdf
+
+logging:
+  level: INFO
