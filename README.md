@@ -4,18 +4,13 @@ This repository provides a Dockerized REST API wrapper around the `opendataloade
 
 The API accepts one or more PDF streams and returns extracted output in multiple formats using content negotiation (`Accept` header) and/or explicit conversion options.
 
-## Project Structure
+## What OpenDataLoader Does
 
-- `docker-api/app.py`: FastAPI service implementation
-- `docker-api/run_server.py`: server entrypoint used by container
-- `docker-api/config.yaml`: default runtime configuration
-- `docker-api/config.example.json`: JSON config example
-- `docker-api/opendataloader-api-examples.http`: REST Client request examples
-- `docker-api/requirements.txt`: runtime dependencies
-- `Dockerfile`: image build definition
-- `docker-compose.yml`: local deployment
-- `scripts/test_rest_api.py`: end-to-end API verification script
-- `scripts/run_docker_and_test.ps1`: helper script for build/run/test
+OpenDataLoader extracts structured content from PDFs for downstream use cases like search, indexing, RAG, and document automation. It can produce formats such as JSON, Markdown, HTML, text, and annotated PDF output through conversion options.
+
+For full product details, capabilities, and documentation, see the official site:
+
+- https://opendataloader.org/
 
 ## Prerequisites
 
