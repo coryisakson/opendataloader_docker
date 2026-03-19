@@ -12,6 +12,10 @@ For full product details, capabilities, and documentation, see the official site
 
 - https://opendataloader.org/
 
+Full API reference for this repository:
+
+- `REST_API.md`
+
 ## Prerequisites
 
 - Docker Desktop (or Docker Engine + Compose)
